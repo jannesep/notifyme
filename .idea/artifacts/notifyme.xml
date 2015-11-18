@@ -37,6 +37,7 @@
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-xc:1.9.11" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="notifyme/web/Web" />
     </root>
   </artifact>
 </component>

@@ -1,20 +1,26 @@
 package me.notify.rest;
 
-import java.io.Serializable;
-
 /**
  * Created by janne on 18.11.2015.
  */
-public class User implements Serializable {
+public class User {
 
     private int id;
     private String username;
-    private String fullName;
+    private String imei;
 
-    public User() {
-        id = 123;
-        username = "testuser";
-        fullName = "Test User";
+    public User(int id, String username, String imei) {
+        this.id = id;
+        this.username = username;
+        this.imei = imei;
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
     }
 
     public int getId() {
@@ -33,11 +39,7 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+
+
 }

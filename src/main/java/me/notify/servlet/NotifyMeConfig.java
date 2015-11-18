@@ -1,5 +1,6 @@
 package me.notify.servlet;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.ApplicationPath;
@@ -13,6 +14,7 @@ public class NotifyMeConfig extends ResourceConfig {
 
     public NotifyMeConfig() {
         packages("me.notify.rest");
+        register(JacksonFeature.class);
     }
 
 }

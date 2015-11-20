@@ -1,4 +1,4 @@
-package me.notify.rest;
+package me.notify.rest.model;
 
 /**
  * Created by janne on 18.11.2015.

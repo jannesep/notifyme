@@ -1,12 +1,9 @@
 package me.notify.servlet;
 
-import javax.annotation.Resource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * Created by janne on 18.11.2015.
@@ -14,7 +11,6 @@ import java.sql.SQLException;
 public class DBManager {
 
     public static Connection getConnection() {
-        Connection conn = null;
         try {
             Context context = new InitialContext();
             Context envContext = (Context) context.lookup("java:comp/env");

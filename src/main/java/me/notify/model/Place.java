@@ -1,4 +1,4 @@
-package me.notify.rest.model;
+package me.notify.model;
 
 /**
  * Created by janne on 20.11.2015.
@@ -19,6 +19,10 @@ public class Place {
         this.longtitude = longtitude;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
+    }
+
+    public Place() {
+
     }
 
     public int getId() {

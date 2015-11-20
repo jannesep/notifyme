@@ -1,6 +1,6 @@
 package me.notify.rest;
 
-import me.notify.rest.model.Place;
+import me.notify.model.Place;
 import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;

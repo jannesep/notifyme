@@ -1,4 +1,4 @@
-package me.notify.rest.model;
+package me.notify.model;
 
 /**
  * Created by janne on 20.11.2015.
@@ -11,6 +11,15 @@ public class FoodCategory {
     public FoodCategory(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public FoodCategory(FoodCategory category) {
+        this.id = category.getId();
+        this.name = category.getName();
+    }
+
+    public FoodCategory() {
+
     }
 
     public int getId() {

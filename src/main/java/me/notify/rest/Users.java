@@ -1,6 +1,6 @@
 package me.notify.rest;
 
-import me.notify.rest.model.User;
+import me.notify.model.User;
 import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;
@@ -20,8 +20,8 @@ public class Users {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List getUser() {
-        List users = new ArrayList();
+    public List<User> getUser() {
+        List<User> users = new ArrayList<User>();
         try {
             ResultSet rs = DBManager.getConnection().createStatement().executeQuery("SELECT id, name, imei FROM users");
             while (rs.next()) {

@@ -1,4 +1,4 @@
-package me.notify.rest.model;
+package me.notify.model;
 
 import java.util.Date;
 
@@ -19,6 +19,10 @@ public class FoodItem {
         this.foodDate = foodDate;
         this.name = name;
         this.description = description;
+    }
+
+    public FoodItem() {
+
     }
 
     public int getId() {

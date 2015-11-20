@@ -1,6 +1,6 @@
 package me.notify.rest;
 
-import me.notify.rest.model.FoodCategory;
+import me.notify.model.FoodCategory;
 import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;

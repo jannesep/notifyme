@@ -20,12 +20,13 @@ import java.util.List;
 public class Notifications {
 
     @GET
+    @Path("/{date}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Notification> getSentNotifications(Date date) {
+    public List<Notification> getSentNotifications(@PathParam("date") long date) {
         List<Notification> notifications = new ArrayList<Notification>();
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT id, user_id, place_id, time, title, message FROM sent_notifications WHERE time > ?");
-            ps.setDate(1, new java.sql.Date(date.getTime()));
+            PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT id, user_id, place_id, time, title, message FROM sent_notification WHERE time >= ?");
+            ps.setDate(1, new java.sql.Date(date));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 notifications.add(new Notification(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getDate(4), rs.getString(5), rs.getString(6)));

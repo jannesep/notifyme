@@ -17,15 +17,15 @@ import java.sql.SQLException;
 public class LunchTimePreferences {
 
     @GET
+    @Path("/{userid}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public LunchTimePreference getLunchTimePreference(User user) {
+    public LunchTimePreference getLunchTimePreference(@PathParam("userid") int userId) {
         try {
             PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT monday, tuesday, wednesday, thursday, friday, saturday, sunday FROM preferred_lunch_time WHERE user_id = ?");
-            ps.setInt(1, user.getId());
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.first()) {
-                return new LunchTimePreference(user, rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+                return new LunchTimePreference(userId, rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
                         rs.getString(5), rs.getString(6), rs.getString(7));
             }
         } catch (SQLException e) {
@@ -38,12 +38,12 @@ public class LunchTimePreferences {
     public void replacePreferences(LunchTimePreference pref) {
         try {
             PreparedStatement ps = DBManager.getConnection().prepareStatement("DELETE FROM preferred_lunch_time WHERE user_id = ?");
-            ps.setInt(1, pref.getUser().getId());
+            ps.setInt(1, pref.getUserId());
             ps.executeUpdate();
 
             ps = DBManager.getConnection().prepareStatement(
                     "INSERT INTO preferred_lunch_time (user_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES (?,?,?,?,?,?,?,?)");
-            ps.setInt(1, pref.getUser().getId());
+            ps.setInt(1, pref.getUserId());
             ps.setString(2, pref.getMonday());
             ps.setString(3, pref.getTuesday());
             ps.setString(4, pref.getWednesday());

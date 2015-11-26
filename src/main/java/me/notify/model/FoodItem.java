@@ -8,12 +8,12 @@ import java.util.Date;
 public class FoodItem {
 
     private int id;
-    private Place place;
+    private int place;
     private Date foodDate;
     private String name;
     private String description;
 
-    public FoodItem(int id, Place place, Date foodDate, String name, String description) {
+    public FoodItem(int id, int place, Date foodDate, String name, String description) {
         this.id = id;
         this.place = place;
         this.foodDate = foodDate;
@@ -33,11 +33,11 @@ public class FoodItem {
         this.id = id;
     }
 
-    public Place getPlace() {
+    public int getPlace() {
         return place;
     }
 
-    public void setPlace(Place place) {
+    public void setPlace(int place) {
         this.place = place;
     }
 

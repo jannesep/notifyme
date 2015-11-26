@@ -4,7 +4,7 @@ package me.notify.model;
  * Created by janne on 20.11.2015.
  */
 public class LunchTimePreference {
-    private User user;
+    private int userId;
     private String monday;
     private String tuesday;
     private String wednesday;
@@ -13,8 +13,8 @@ public class LunchTimePreference {
     private String saturday;
     private String sunday;
 
-    public LunchTimePreference(User user, String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday) {
-        this.user = user;
+    public LunchTimePreference(int userId, String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday) {
+        this.userId = userId;
         this.monday = monday;
         this.tuesday = tuesday;
         this.wednesday = wednesday;
@@ -28,12 +28,12 @@ public class LunchTimePreference {
 
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getMonday() {

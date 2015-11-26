@@ -5,10 +5,7 @@ import me.notify.model.FoodCategory;
 import me.notify.model.UserFoodCategoryContainer;
 import me.notify.servlet.DBManager;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +21,8 @@ import java.util.List;
 public class CannotConsume {
 
     @GET
-    public List<FoodCategory> getCannotConsume(int userId) {
+    @Path("/{userid}")
+    public List<FoodCategory> getCannotConsume(@PathParam("userid") int userId) {
         List<FoodCategory> categories = new ArrayList<FoodCategory>();
 
         try {

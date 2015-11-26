@@ -20,15 +20,16 @@ import java.util.List;
 public class FoodItems {
 
     @GET
+    @Path("/{placeid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<FoodItem> getFoodItems(Place place) {
+    public List<FoodItem> getFoodItems(@PathParam("placeid") int placeId) {
         List<FoodItem> items = new ArrayList<FoodItem>();
         try {
             PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT id, food_date, name, descprition FROM food_items WHERE place_id = ?");
-            ps.setInt(1, place.getId());
+            ps.setInt(1, placeId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                items.add(new FoodItem(rs.getInt(1), place, rs.getDate(2), rs.getString(3), rs.getString(4)));
+                items.add(new FoodItem(rs.getInt(1), placeId, rs.getDate(2), rs.getString(3), rs.getString(4)));
             }
         } catch (SQLException e) {
             e.printStackTrace();

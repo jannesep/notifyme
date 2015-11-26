@@ -20,13 +20,14 @@ import java.util.List;
 public class Feedbacks {
 
     @GET
+    @Path("/{date}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Feedback> getFeedbacks(Date date) {
+    public List<Feedback> getFeedbacks(@PathParam("date") long date) {
         List<Feedback> feedbacks = new ArrayList<Feedback>();
         try {
             PreparedStatement ps = DBManager.getConnection().prepareStatement(
                     "SELECT id, notification_id, time, title, answer FROM feedback WHERE time > ?");
-            ps.setDate(1, new java.sql.Date(date.getTime()));
+            ps.setDate(1, new java.sql.Date(date));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 feedbacks.add(new Feedback(rs.getInt(1), rs.getInt(2), rs.getDate(3), rs.getString(4), rs.getString(5)));

@@ -35,6 +35,7 @@ public class LunchTimePreferences {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     public void replacePreferences(LunchTimePreference pref) {
         try {
             PreparedStatement ps = DBManager.getConnection().prepareStatement("DELETE FROM preferred_lunch_time WHERE user_id = ?");

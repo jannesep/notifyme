@@ -24,7 +24,7 @@ public class FoodItems {
         Connection conn = null;
         try {
             conn = DBManager.getConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT id, food_date, name, descprition FROM food_items WHERE place_id = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT id, food_date, name, description FROM food_item WHERE place_id = ?");
             ps.setInt(1, placeId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

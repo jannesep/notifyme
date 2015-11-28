@@ -3,6 +3,7 @@ package me.notify.controller;
 import me.notify.model.FoodCategory;
 import me.notify.servlet.DBManager;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,8 +14,10 @@ import java.sql.SQLException;
 public class FoodCategoryController {
 
     public static FoodCategory getFoodCategory(int id) {
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT id, name FROM food_category WHERE id = ?");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT id, name FROM food_category WHERE id = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.first()) {

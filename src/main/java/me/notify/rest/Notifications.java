@@ -5,6 +5,7 @@ import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,15 +25,24 @@ public class Notifications {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Notification> getSentNotifications(@PathParam("date") long date) {
         List<Notification> notifications = new ArrayList<Notification>();
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT id, user_id, place_id, time, title, message FROM sent_notification WHERE time >= ?");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT id, user_id, place_id, time, title, message FROM sent_notification WHERE time >= ?");
             ps.setDate(1, new java.sql.Date(date));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 notifications.add(new Notification(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getDate(4), rs.getString(5), rs.getString(6)));
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return notifications;
     }
@@ -40,8 +50,10 @@ public class Notifications {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addSentNotification(Notification notification) {
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement(
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO sent_notification (user_id, place_id, time, title, message) VALUES (?,?,?,?,?)");
             ps.setInt(1, notification.getUserId());
             ps.setInt(2, notification.getPlaceId());
@@ -49,8 +61,15 @@ public class Notifications {
             ps.setString(4, notification.getTitle());
             ps.setString(5, notification.getMessage());
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

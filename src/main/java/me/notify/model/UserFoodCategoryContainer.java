@@ -8,9 +8,9 @@ import java.util.List;
 public class UserFoodCategoryContainer {
 
     private int userId;
-    private List<FoodCategory> categories;
+    private List<Integer> categories;
 
-    public UserFoodCategoryContainer(int userId, List<FoodCategory> categories) {
+    public UserFoodCategoryContainer(int userId, List<Integer> categories) {
         this.userId = userId;
         this.categories = categories;
     }
@@ -27,11 +27,11 @@ public class UserFoodCategoryContainer {
         this.userId = userId;
     }
 
-    public List<FoodCategory> getCategories() {
+    public List<Integer> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<FoodCategory> categories) {
+    public void setCategories(List<Integer> categories) {
         this.categories = categories;
     }
 }

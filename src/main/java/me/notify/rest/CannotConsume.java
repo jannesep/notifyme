@@ -7,6 +7,7 @@ import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,17 +25,25 @@ public class CannotConsume {
     @Path("/{userid}")
     public List<FoodCategory> getCannotConsume(@PathParam("userid") int userId) {
         List<FoodCategory> categories = new ArrayList<FoodCategory>();
-
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement(
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(
                     "SELECT category_id FROM cannot_consume WHERE user_id = ?");
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 categories.add(new FoodCategory(FoodCategoryController.getFoodCategory(rs.getInt(1))));
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }  finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return categories;
     }
@@ -42,19 +51,28 @@ public class CannotConsume {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addCannotConsume(UserFoodCategoryContainer container) {
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("DELETE FROM cannot_consume WHERE user_id = ?");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM cannot_consume WHERE user_id = ?");
             ps.setInt(1, container.getUserId());
             ps.executeUpdate();
 
-            for (FoodCategory categ : container.getCategories()) {
-                ps = DBManager.getConnection().prepareStatement("INSERT INTO cannot_consume (user_id, category_id) VALUES (?,?)");
+            for (Integer categ : container.getCategories()) {
+                ps = conn.prepareStatement("INSERT INTO cannot_consume (user_id, category_id) VALUES (?,?)");
                 ps.setInt(1, container.getUserId());
-                ps.setInt(2, categ.getId());
+                ps.setInt(2, categ);
                 ps.executeUpdate();
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }  finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

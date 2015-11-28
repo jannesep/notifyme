@@ -8,6 +8,7 @@ import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,15 +27,24 @@ public class FoodCategoryLink {
     @Produces(MediaType.APPLICATION_JSON)
     public List<FoodCategory> getCategoryLinks(@PathParam("foodid") int item) {
         List<FoodCategory> categories = new ArrayList<FoodCategory>();
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT category_id FROM food_category_link WHERE food_id = ?");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT category_id FROM food_category_link WHERE food_id = ?");
             ps.setInt(1, item);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 categories.add(new FoodCategory(FoodCategoryController.getFoodCategory(rs.getInt(1))));
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return categories;
     }
@@ -42,26 +52,44 @@ public class FoodCategoryLink {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void createLink(FoodItemCategoryContainer container) {
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("INSERT INTO food_category_link (food_id, category_id) VALUES (?,?)");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO food_category_link (food_id, category_id) VALUES (?,?)");
             ps.setInt(1, container.getFoodId());
             ps.setInt(2, container.getCategId());
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     public void deleteLink(FoodItemCategoryContainer container) {
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("DELETE FROM food_category_link WHERE food_id = ? AND category_id = ?");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM food_category_link WHERE food_id = ? AND category_id = ?");
             ps.setInt(1, container.getFoodId());
             ps.setInt(2, container.getCategId());
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

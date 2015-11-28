@@ -6,6 +6,7 @@ import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,16 +21,25 @@ public class LunchTimePreferences {
     @Path("/{userid}")
     @Produces(MediaType.APPLICATION_JSON)
     public LunchTimePreference getLunchTimePreference(@PathParam("userid") int userId) {
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("SELECT monday, tuesday, wednesday, thursday, friday, saturday, sunday FROM preferred_lunch_time WHERE user_id = ?");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT monday, tuesday, wednesday, thursday, friday, saturday, sunday FROM preferred_lunch_time WHERE user_id = ?");
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.first()) {
                 return new LunchTimePreference(userId, rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
                         rs.getString(5), rs.getString(6), rs.getString(7));
             }
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return new LunchTimePreference();
     }
@@ -37,12 +47,14 @@ public class LunchTimePreferences {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void replacePreferences(LunchTimePreference pref) {
+        Connection conn = null;
         try {
-            PreparedStatement ps = DBManager.getConnection().prepareStatement("DELETE FROM preferred_lunch_time WHERE user_id = ?");
+            conn = DBManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM preferred_lunch_time WHERE user_id = ?");
             ps.setInt(1, pref.getUserId());
             ps.executeUpdate();
 
-            ps = DBManager.getConnection().prepareStatement(
+            ps = conn.prepareStatement(
                     "INSERT INTO preferred_lunch_time (user_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES (?,?,?,?,?,?,?,?)");
             ps.setInt(1, pref.getUserId());
             ps.setString(2, pref.getMonday());
@@ -53,8 +65,15 @@ public class LunchTimePreferences {
             ps.setString(7, pref.getSaturday());
             ps.setString(8, pref.getSunday());
             ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

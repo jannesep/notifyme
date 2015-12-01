@@ -68,7 +68,8 @@ public class FoodItems {
     }
 
     @DELETE
-    public void deleteFoodItem(int id) {
+    @Path("/{id}")
+    public void deleteFoodItem(@PathParam("id") int id) {
         Connection conn = null;
         try {
             conn = DBManager.getConnection();

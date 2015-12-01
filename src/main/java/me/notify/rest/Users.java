@@ -65,7 +65,8 @@ public class Users {
     }
 
     @DELETE
-    public void deleteUser(int id) {
+    @Path("/{id}")
+    public void deleteUser(@PathParam("id") int id) {
         Connection conn = null;
         try {
             conn = DBManager.getConnection();

@@ -69,7 +69,8 @@ public class Places {
     }
 
     @DELETE
-    public void deletePlace(int id) {
+    @Path("/{id}")
+    public void deletePlace(@PathParam("id") int id) {
         Connection conn = null;
         try {
             conn = DBManager.getConnection();

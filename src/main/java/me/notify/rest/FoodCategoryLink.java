@@ -4,6 +4,7 @@ import me.notify.controller.FoodCategoryController;
 import me.notify.model.FoodCategory;
 import me.notify.model.FoodItem;
 import me.notify.model.FoodItemCategoryContainer;
+import me.notify.model.FoodItemCategoryList;
 import me.notify.servlet.DBManager;
 
 import javax.ws.rs.*;
@@ -71,6 +72,31 @@ public class FoodCategoryLink {
         }
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createMultipleLinks(FoodItemCategoryList items) {
+        Connection conn = null;
+        try {
+            conn = DBManager.getConnection();
+            PreparedStatement ps = null;
+            for (Integer catId : items.getCategoryIds()) {
+                ps = conn.prepareStatement("INSERT INTO food_category_link (food_id, category_id) VALUES (?,?)");
+                ps.setInt(1, items.getFoodId());
+                ps.setInt(2, catId);
+                ps.executeUpdate();
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     public void deleteLink(FoodItemCategoryContainer container) {
@@ -92,5 +118,4 @@ public class FoodCategoryLink {
             }
         }
     }
-
 }

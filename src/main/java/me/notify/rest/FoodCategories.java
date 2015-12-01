@@ -64,8 +64,9 @@ public class FoodCategories {
         }
     }
 
+    @Path("/{id}")
     @DELETE
-    public void deleteFoodCategory(int id) {
+    public void deleteFoodCategory(@PathParam("id") int id) {
         Connection conn = null;
         try {
             conn = DBManager.getConnection();
